@@ -11,7 +11,25 @@ const gpa = util.gpa;
 const data = @embedFile("data/day01.txt");
 
 pub fn main() !void {
-    
+    var elves = split(u8, data, "\n\n");
+    var maxes = [_]u32{ 0, 0, 0 };
+    while (elves.next()) |elf| {
+        var foods = tokenize(u8, elf, "\n");
+        var sum: u32 = 0;
+        while (foods.next()) |food| {
+            sum += try parseInt(u32, food, 10);
+        }
+        if (sum > maxes[2]) {
+            maxes[2] = sum;
+            sort(u32, &maxes, {}, comptime desc(u32));
+        }
+    }
+    var top3: u32 = 0;
+    for (maxes) |m| {
+        top3 += m;
+    }
+    print("part 1: {d}\n", .{maxes[0]});
+    print("part 2: {d}\n", .{top3});
 }
 
 // Useful stdlib functions
